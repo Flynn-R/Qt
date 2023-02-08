@@ -64,3 +64,9 @@ void Task_1::on_plainTextEdit_textChanged()
     cursor.movePosition(QTextCursor::End);
     ui->plainTextEdit->setTextCursor(cursor);
 }
+
+void Task_1::on_pushButton_clicked()
+{
+    close();
+}
+

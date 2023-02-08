@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Task_1</class>
- <widget class="QMainWindow" name="Task_1">
+ <class>Task_3</class>
+ <widget class="QMainWindow" name="Task_3">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>449</height>
+    <width>800</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Задание 1</string>
+   <string>Задание 3</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit">
+   <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>401</width>
-      <height>331</height>
+      <width>751</width>
+      <height>321</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="closeButton">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>370</y>
+      <x>700</x>
+      <y>410</y>
       <width>89</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Далее</string>
+     <string>Закрыть</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="changeButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>410</y>
+      <width>89</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Изменить</string>
     </property>
    </widget>
   </widget>
@@ -43,7 +56,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>443</width>
+     <width>800</width>
      <height>22</height>
     </rect>
    </property>

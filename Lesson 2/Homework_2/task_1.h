@@ -20,6 +20,8 @@ public:
 private slots:
     void on_plainTextEdit_textChanged();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Task_1 *ui;
     ParseText* parseText;

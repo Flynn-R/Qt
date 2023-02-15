@@ -1,0 +1,8 @@
+Welcome to the simplest text editor!
+
+Editor alows you to work only with ".txt" extesnsion files.
+In the input field you can enter your text. Press "Save" button, select a path and name your file to save the file.
+
+Press "Open" button to open an existing file.
+
+Press "Close" button to exit the program.

@@ -37,7 +37,7 @@ private slots:
     void on_printButton_clicked();
     void themeMenuTriggered();
     void languageMenuTriggered();
-//    void subwindowChanged(QMdiSubWindow*);
+    void subwindowChanged(QMdiSubWindow*);
 
 signals:
     void closeEditor();

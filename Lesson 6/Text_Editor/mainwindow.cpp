@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     dialog = new Dialog(this);
     
-//    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::subwindowChanged);
+    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::subwindowChanged);
     currentSubwindow = ui->mdiArea->addSubWindow(new QPlainTextEdit(this));
     ui->mdiArea->setViewMode(QMdiArea::TabbedView);
 
@@ -86,7 +86,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_closeButton_clicked()
 {
-    close();
+    if (ui->mdiArea->subWindowList().empty())
+        close();
+    else
+        currentSubwindow->close();
 }
 
 void MainWindow::on_saveButton_clicked()
@@ -164,9 +167,10 @@ void MainWindow::on_helpButton_clicked()
 
 void MainWindow::newFileOpen()
 {
-//    currentSubwindow = ui->mdiArea->addSubWindow(new QPlainTextEdit(this));
+    currentSubwindow = ui->mdiArea->addSubWindow(new QPlainTextEdit(this));
+    currentSubwindow->show();
 //    ui->mdiArea->setActiveSubWindow(currentSubwindow);
-    dynamic_cast<QPlainTextEdit*>(ui->mdiArea->currentSubWindow()->widget())->clear();
+    dynamic_cast<QPlainTextEdit*>(currentSubwindow->widget())->clear();
     ui->mdiArea->currentSubWindow()->setWindowTitle("(Untitled)");
 //    ui->plainTextEdit->clear();
 }
@@ -290,4 +294,9 @@ void MainWindow::languageMenuTriggered()
         switchLanguage(true);
     else
         switchLanguage(false);
+}
+
+void MainWindow::subwindowChanged(QMdiSubWindow* subwindow)
+{
+    currentSubwindow = subwindow;
 }

@@ -22,11 +22,11 @@ private:
     QGraphicsView* view;
     QGraphicsScene* scene;
 
-private slots:
-    void addBlock(BlockScheme*);
-
 protected:
     void mousePressEvent(QMouseEvent*) override;
+
+public slots:
+    void deleteBlock(BlockScheme*);
 };
 
 class BlockScheme : public QObject, public QGraphicsItem
@@ -34,7 +34,7 @@ class BlockScheme : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    explicit BlockScheme(QPoint, QObject* parent = nullptr, double multi = 1.0);
+    explicit BlockScheme(QObject* parent = nullptr, double multi = 1.0);
     void setBrush(QBrush);
 
 private:
@@ -59,8 +59,7 @@ protected:
 
 signals:
     void redraw();
-    void addBlock(QGraphicsSceneMouseEvent*);
-    void deleteBlock();
+    void deleteBlock(BlockScheme*);
 };
 
 #endif // MAINWINDOW_H

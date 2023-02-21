@@ -21,12 +21,17 @@ public:
 private:
     QGraphicsView* view;
     QGraphicsScene* scene;
+    BlockScheme* movingItem;
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
 
-public slots:
-    void deleteBlock(BlockScheme*);
+signals:
+    void blockLeftClick(QPointF, BlockScheme*);
+    void blockMove(QPointF, BlockScheme*);
+    void blockRelease(BlockScheme*);
 };
 
 class BlockScheme : public QObject, public QGraphicsItem
@@ -47,19 +52,18 @@ private:
     };
     static Geometry figureNext;
     Geometry figure;
-    QPoint beginPoint;
     bool moving;
     QBrush brush;
     double multiplier;
-
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-//    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-//    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    QPoint beginPoint;
 
 signals:
-    void redraw();
-    void deleteBlock(BlockScheme*);
+    void reDraw();
+
+public slots:
+    void blockLeftClicked(QPointF, BlockScheme*);
+    void blockMoveEvent(QPointF, BlockScheme*);
+    void blockReleaseEvent(BlockScheme*);
 };
 
 #endif // MAINWINDOW_H

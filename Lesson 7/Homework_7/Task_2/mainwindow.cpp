@@ -24,31 +24,78 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     {
         if (block != nullptr)
         {
-            movingItem = block;
-            emit blockLeftClick(mapToScene(event->position().toPoint()), movingItem);
+            movingItem = static_cast<BlockScheme*>(block);
+            movingItem->blockLeftClicked(mapToScene(event->position().toPoint()));
         }
         else
         {
             movingItem = nullptr;
             auto item = new BlockScheme(this);
             scene->addItem(item);
-            connect(this, &MainWindow::blockLeftClick, item, &BlockScheme::blockLeftClicked);
-            connect(this, &MainWindow::blockMove, item, &BlockScheme::blockMoveEvent);
-            connect(this, &MainWindow::blockRelease, item, &BlockScheme::blockReleaseEvent);
+//            connect(this, &MainWindow::blockLeftClick, item, &BlockScheme::blockLeftClicked);
+            connect(item, &BlockScheme::redraw, this, &MainWindow::redraw);
+//            connect(this, &MainWindow::blockMove, item, &BlockScheme::blockMoveEvent);
+//            connect(this, &MainWindow::blockRelease, item, &BlockScheme::blockReleaseEvent);
         }
     }
     else if (event->button() == Qt::RightButton)
     {
         if (block != nullptr)
+        {
+            delete movingItem;
+            movingItem = nullptr;
             scene->removeItem(block);
+        }
     }
+    else if (event->button() == Qt::MiddleButton)
+    {
+        if (block != nullptr)
+        {
+            changingItem = static_cast<BlockScheme*>(block);
+            changingItem->blockMiddleClicked();
+        }
+        else
+            changingItem = nullptr;
+    }
+}
+
+void MainWindow::wheelEvent(QWheelEvent* event)
+{
+    if (changingItem != nullptr)
+    {
+        changingItem->wheelMoveEvent(event->angleDelta().y());
+    }
+//    if (event->button() == Qt::MiddleButton)
+//    {
+//        if (event->angleDelta().y() > 0)
+//        {
+//            scene->removeItem(block);
+//            auto item = new BlockScheme(this, block->getMultiplier() + 0.1);
+//            scene->addItem(item);
+//            connect(item, &BlockScheme::redraw, this, &MainWindow::redraw);
+//        }
+//        else if (event->angleDelta().y() < 0)
+//        {
+//            scene->removeItem(block);
+//            auto item = new BlockScheme(this, block->getMultiplier() - 0.1);
+//            scene->addItem(item);
+//            connect(item, &BlockScheme::redraw, this, &MainWindow::redraw);
+//        }
+//    }
+//    redraw();
+}
+
+void MainWindow::redraw()
+{
+    scene->update();
+    update();
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton && movingItem != nullptr)
     {
-        emit blockRelease(movingItem);
+        movingItem->blockReleaseEvent();
         movingItem = nullptr;
     }
 }
@@ -56,7 +103,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event)
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
     if (movingItem != nullptr)
-        emit blockMove(mapToScene(event->position().toPoint()), movingItem);
+        movingItem->blockMoveEvent(mapToScene(event->position().toPoint()));
 }
 
 BlockScheme::BlockScheme(QObject* parent, double multi) : QObject(parent), QGraphicsItem(), x(0), y(0), multiplier(multi)
@@ -81,6 +128,8 @@ BlockScheme::BlockScheme(QObject* parent, double multi) : QObject(parent), QGrap
     }
     setPos(x, y);
     moving = false;
+    changing = false;
+    angle = 0;
 }
 
 void BlockScheme::paint(QPainter* painter, const QStyleOptionGraphicsItem* options, QWidget* widget)
@@ -112,7 +161,7 @@ void BlockScheme::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void BlockScheme::setBrush(QBrush br)
 {
     brush = br;
-    emit reDraw();
+    emit redraw();
 }
 
 QRectF BlockScheme::boundingRect() const
@@ -120,26 +169,65 @@ QRectF BlockScheme::boundingRect() const
     return QRectF(x, y, 200 * multiplier, 100 * multiplier);
 }
 
-void BlockScheme::blockLeftClicked(QPointF point, BlockScheme* block)
-{
-    block->beginPoint = point.toPoint();
-//    moving = true;
-}
+//void BlockScheme::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+//{
+//    if (event->button() == Qt::LeftButton)
+//    {
+//        moving = false;
+//        emit redraw();
+//    }
+//}
 
-void BlockScheme::blockReleaseEvent(BlockScheme* block)
-{
-//    moving = false;
-    emit reDraw();
-}
-
-void BlockScheme::blockMoveEvent(QPointF position, BlockScheme* block)
-{
+//void BlockScheme::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+//{
 //    if (moving)
 //    {
-        QPoint point = position.toPoint() - beginPoint;
+//        this->getFigure();
+//        QPoint point = event->pos().toPoint() - beginPoint;
+//        x += point.x();
+//        y += point.y();
+//        beginPoint = event->pos().toPoint();
+//        emit redraw();
+//    }
+//}
+
+void BlockScheme::blockLeftClicked(QPointF point)
+{
+    moving = true;
+    beginPointMove = point.toPoint();
+}
+
+void BlockScheme::blockMiddleClicked()
+{
+    changing = true;
+}
+
+void BlockScheme::blockReleaseEvent()
+{
+    moving = false;
+    emit redraw();
+}
+
+void BlockScheme::blockMoveEvent(QPointF position)
+{
+    if (moving)
+    {
+        QPoint point = position.toPoint() - beginPointMove;
         x += point.x();
         y += point.y();
-        beginPoint = position.toPoint();
-        emit reDraw();
-//    }
+        beginPointMove = position.toPoint();
+        emit redraw();
+    }
+}
+
+void BlockScheme::wheelMoveEvent(qint32 angle)
+{
+    if (changing)
+    {
+        if (angle > 0)
+            multiplier += 0.1;
+        else if (angle < 0)
+            multiplier -= 0.1;
+        emit redraw();
+    }
 }

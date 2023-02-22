@@ -22,16 +22,21 @@ private:
     QGraphicsView* view;
     QGraphicsScene* scene;
     BlockScheme* movingItem;
+    BlockScheme* changingItem;
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
 
 signals:
-    void blockLeftClick(QPointF, BlockScheme*);
-    void blockMove(QPointF, BlockScheme*);
-    void blockRelease(BlockScheme*);
+//    void blockLeftClick(QPoint);
+//    void blockMove(QPointF, BlockScheme*);
+//    void blockRelease(BlockScheme*);
+
+private slots:
+    void redraw();
 };
 
 class BlockScheme : public QObject, public QGraphicsItem
@@ -41,6 +46,11 @@ class BlockScheme : public QObject, public QGraphicsItem
 public:
     explicit BlockScheme(QObject* parent = nullptr, double multi = 1.0);
     void setBrush(QBrush);
+    void blockLeftClicked(QPointF);
+    void blockMiddleClicked();
+    void blockMoveEvent(QPointF);
+    void blockReleaseEvent();
+    void wheelMoveEvent(qint32);
 
 private:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
@@ -53,17 +63,23 @@ private:
     static Geometry figureNext;
     Geometry figure;
     bool moving;
+    bool changing;
+    qint32 angle;
     QBrush brush;
     double multiplier;
-    QPoint beginPoint;
+    QPoint beginPointMove;
 
 signals:
-    void reDraw();
+    void redraw();
 
-public slots:
-    void blockLeftClicked(QPointF, BlockScheme*);
-    void blockMoveEvent(QPointF, BlockScheme*);
-    void blockReleaseEvent(BlockScheme*);
+protected:
+//    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+//    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+
+//public slots:
+//    void blockLeftClicked(QPoint);
+//    void blockMoveEvent(QPointF, BlockScheme*);
+//    void blockReleaseEvent(BlockScheme*);
 };
 
 #endif // MAINWINDOW_H

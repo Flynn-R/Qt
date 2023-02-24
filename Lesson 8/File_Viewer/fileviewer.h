@@ -76,7 +76,7 @@ private:
     bool searching;
 
 signals:
-    void stoppedSearch();
+    void stoppedThread();
     void showFoundPath(QString);
     void searchFile(QString);
 };

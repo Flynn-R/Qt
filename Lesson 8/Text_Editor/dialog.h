@@ -13,7 +13,7 @@ class Dialog : public QDialog
 
 public:
     explicit Dialog(QWidget *parent = nullptr);
-    void setKeyMap(QMap<const QString, QKeySequence>);
+    void setKeyMap(QMap<QString, QKeySequence>);
     void setLanguageRadioButton(bool);
     void setTheme(bool);
     void translate();
@@ -30,13 +30,13 @@ private slots:
     void on_readOnlySeq_editingFinished();
 
 signals:
-    void hotkeyChanged(QMap<const QString, QKeySequence>);
+    void hotkeyChanged(QMap<QString, QKeySequence>);
     void languageSelected(bool);
     void themeSelected(bool);
 
 private:
     Ui::Dialog *ui;
-    QMap<const QString, QKeySequence> newKeyMap;
+    QMap<QString, QKeySequence> newKeyMap;
     bool finder(QKeySequence&);
 };
 

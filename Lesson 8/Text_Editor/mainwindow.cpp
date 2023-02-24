@@ -8,6 +8,7 @@
 #include <QPlainTextEdit>
 #include <QClipboard>
 #include <QFontDialog>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -214,7 +215,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         emit newOpen();
 }
 
-void MainWindow::changeHotkey(QMap<const QString, QKeySequence> newKeyMap)
+void MainWindow::changeHotkey(QMap<QString, QKeySequence> newKeyMap)
 {
     keyMap = newKeyMap;
 }
@@ -319,6 +320,10 @@ MyTextEdit::MyTextEdit(QWidget *parent) : QTextEdit(parent)
     contextMenu->addSeparator();
 
     connect(contextMenu->addAction(tr("Шрифты")), &QAction::triggered, this, &MyTextEdit::setFont);
+
+    contextMenu->addSeparator();
+
+    connect(contextMenu->addAction(tr("Вставить текущую дату")), &QAction::triggered, this, &MyTextEdit::insertCurrentDateTime);
 }
 
 void MyTextEdit::contextMenuEvent(QContextMenuEvent* event)
@@ -369,4 +374,10 @@ void MyTextEdit::setFont()
         format.setFont(font);
         textCursor().setCharFormat(format);
     }
+}
+
+void MyTextEdit::insertCurrentDateTime()
+{
+    QDateTime date = QDateTime::currentDateTime();
+    textCursor().insertText(" [" + date.toString("dd.MM.yyyy") + " " + date.toString("hh:mm:ss") + "] ");
 }

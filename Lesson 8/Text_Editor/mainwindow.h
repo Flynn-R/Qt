@@ -31,7 +31,7 @@ private slots:
     void on_helpButton_clicked();
     void newFileOpen();
     void on_settingsButton_clicked();
-    void changeHotkey(QMap<const QString, QKeySequence>);
+    void changeHotkey(QMap<QString, QKeySequence>);
     void switchLanguage(bool);
     void switchTheme(bool);
     void on_readOnlyButton_clicked();
@@ -51,7 +51,7 @@ signals:
 private:
     Ui::MainWindow *ui;
 
-    QMap<const QString, QKeySequence> keyMap;
+    QMap<QString, QKeySequence> keyMap;
     void keyReleaseEvent(QKeyEvent*) override;
 
     QTranslator translator;
@@ -111,6 +111,7 @@ private slots:
     void alignRight();
     void alignCenter();
     void setFont();
+    void insertCurrentDateTime();
 };
 
 #endif // MAINWINDOW

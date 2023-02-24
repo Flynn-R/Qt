@@ -13,7 +13,7 @@ Dialog::~Dialog()
     delete ui;
 }
 
-void Dialog::setKeyMap(QMap<const QString, QKeySequence> keyMap)
+void Dialog::setKeyMap(QMap<QString, QKeySequence> keyMap)
 {
     newKeyMap = keyMap;
 }

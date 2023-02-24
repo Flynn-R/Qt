@@ -186,7 +186,7 @@ void ThreadSearch::run()
         folders.removeFirst();
     }
 
-    emit stoppedSearch();
+    emit stoppedThread();
 }
 
 void ThreadSearch::searchStop()
@@ -221,7 +221,8 @@ void Controller::startSearch(QString folder, QString file)
 
     searchThread = QSharedPointer<ThreadSearch>::create(folder, file);
     searchThread->start(QThread::NormalPriority);
-    connect(searchThread.get(), &ThreadSearch::stoppedSearch, this, &Controller::deleteThread);
+
+    connect(searchThread.get(), &ThreadSearch::stoppedThread, this, &Controller::deleteThread);         // Здесь ошибка, но не могу понять в чём она заключается
     connect(searchThread.get(), &ThreadSearch::showFoundPath, this, &Controller::printCurrentPath);
     connect(searchThread.get(), &ThreadSearch::searchFile, this, &Controller::generateStringPathFile);
     emit newSearch();

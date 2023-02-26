@@ -6,7 +6,7 @@ BorderImage {
 
     Text {
         id: _text
-        text: "Write"
+        text: "Add task"
         color: "white"
         anchors.centerIn: parent
     }

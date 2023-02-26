@@ -8,10 +8,10 @@ Organizer::Organizer(QObject *parent)
     if (!file)
         return;
 
-    if (!file->open(QIODevice::WriteOnly | QIODevice::Append))
-        emit fileLoaded(false);
-    else
+    if (file->open(QIODevice::WriteOnly | QIODevice::Append))
         emit fileLoaded(true);
+    else
+        emit fileLoaded(false);
 }
 
 Organizer::~Organizer()
@@ -23,10 +23,8 @@ Organizer::~Organizer()
     }
 }
 
-void Organizer::writeNewTask(QString name, QString date, QString progress)
+void Organizer::addNewTask(QString name, QString date, QString progress)
 {
-    QTextStream stream(file);
-
     if (!name.isEmpty())
     {
         QDate d = QDate::fromString(date, "dd.MM.yyyy");
@@ -34,7 +32,17 @@ void Organizer::writeNewTask(QString name, QString date, QString progress)
         {
             qint32 p = progress.toInt();
             if (p >= 0 && p <= 10)
-                stream << "\"" + name + "\"" << " must be completed until " << date << "; current progress: " << progress << "/10\n";
+                taskList.append("\"" + name + "\"" + " must be completed until " + date + "; current progress: " + progress + "/10\n");
         }
+    }
+}
+
+void Organizer::writeToFile()
+{
+    if (!taskList.isEmpty())
+    {
+        QTextStream stream(file);
+        for (auto& it : taskList)
+            stream << it;
     }
 }

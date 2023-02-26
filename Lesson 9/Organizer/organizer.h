@@ -12,10 +12,12 @@ class Organizer : public QObject
 public:
     explicit Organizer(QObject *parent = nullptr);
     ~Organizer();
-    Q_INVOKABLE void writeNewTask(QString, QString, QString);
+    Q_INVOKABLE void addNewTask(QString, QString, QString);
+    Q_INVOKABLE void writeToFile();
 
 private:
     QFile* file;
+    QStringList taskList;
 
 signals:
     void fileLoaded(bool success);

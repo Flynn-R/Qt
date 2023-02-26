@@ -12,6 +12,10 @@ Window {
     visible: true
     title: qsTr("Organizer")
 
+    onClosing: {
+        _organizer.writeToFile()
+    }
+
     RowLayout {
         id: _layout
         width: parent.width - 15
@@ -63,7 +67,7 @@ Window {
         height: 50
 
         onClicked: {
-            _organizer.writeNewTask(_name.text, _deadline.text, _progress.text)
+            _organizer.addNewTask(_name.text, _deadline.text, _progress.text)
             _name.text = ""
             _deadline.text = ""
             _progress.text = ""

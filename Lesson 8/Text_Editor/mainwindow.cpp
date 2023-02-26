@@ -334,8 +334,6 @@ void MyTextEdit::contextMenuEvent(QContextMenuEvent* event)
 void MyTextEdit::copy()
 {
     format = textCursor().charFormat();
-    QString text = textCursor().selectedText();
-    qApp->clipboard()->setText(text);
 }
 
 void MyTextEdit::paste()
@@ -343,8 +341,6 @@ void MyTextEdit::paste()
     QTextCursor cursor = textCursor();
     cursor.setCharFormat(format);
     setTextCursor(cursor);
-    QString text = qApp->clipboard()->text();
-    textCursor().insertText(text);
 }
 
 void MyTextEdit::alignLeft()
@@ -367,9 +363,9 @@ void MyTextEdit::setFont()
     QFont font = textCursor().charFormat().font();
     QFontDialog fontDialog(font, this);
 
-    bool* acception;
-    font = fontDialog.getFont(acception);
-    if (*acception)
+    bool acception;
+    font = fontDialog.getFont(&acception);
+    if (acception)
     {
         format.setFont(font);
         textCursor().setCharFormat(format);

@@ -263,11 +263,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <widget class="QKeySequenceEdit" name="closeSeq">
-             <property name="clearButtonEnabled">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <widget class="QKeySequenceEdit" name="closeSeq"/>
            </item>
            <item>
             <widget class="QKeySequenceEdit" name="saveSeq"/>

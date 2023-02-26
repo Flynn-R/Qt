@@ -1,0 +1,3 @@
+"Hello, world!" must be completed until 26.02.2023; current progress: 5/10
+"First task complete" must be completed until 26.02.1990; current progress: 10/10
+"Testing my button" must be completed until 01.03.1998; current progress: 0/10

@@ -4,7 +4,7 @@
 Organizer::Organizer(QObject *parent)
     : QObject{parent}
 {
-    file = new QFile("../Organizer/tasks.txt");
+    file = new QFile("tasks.txt");
 }
 
 Organizer::~Organizer()
@@ -24,12 +24,13 @@ void Organizer::addNewTask(QString name, QString date, QString progress)
             if (p >= 0 && p <= 10)
             {
                 taskList.append("\"" + name + "\"" + " must be completed until " + date + "; current progress: " + progress + "/10\n");
+                emit incorrectData(true);
                 return;
             }
         }
     }
 
-    emit incorrectData();
+    emit incorrectData(false);
 }
 
 void Organizer::writeToFile()

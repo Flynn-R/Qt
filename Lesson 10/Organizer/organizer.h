@@ -22,7 +22,7 @@ private:
 
 signals:
     void fileLoaded(bool success);
-    void incorrectData();
+    void incorrectData(bool arg);
 };
 
 #endif // ORGANIZER_H

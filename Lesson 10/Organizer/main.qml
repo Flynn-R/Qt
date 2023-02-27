@@ -72,8 +72,6 @@ Window {
             _name.text = ""
             _deadline.text = ""
             _progress.text = ""
-
-            _status.text = _organizer.currentStatus()
         }
     }
 
@@ -96,7 +94,10 @@ Window {
         }
 
         onIncorrectData: {
-            _status.text = "Incorrect data was entered!"
+            if (arg)
+                _status.text = _organizer.currentStatus()
+            else
+                _status.text = "Incorrect data was entered!"
         }
     }
 }

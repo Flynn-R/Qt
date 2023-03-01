@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MyButton.qml</file>
+        <file>tasks.db</file>
+        <file>viewWindow.qml</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file>button.png</file>
+    </qresource>
+</RCC>

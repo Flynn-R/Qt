@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QDate>
 #include <QSqlDatabase>
+#include <QSqlTableModel>
+#include <QTableView>
 
 class Organizer : public QObject
 {
@@ -16,7 +18,7 @@ public:
     Q_INVOKABLE void addNewTask(QString, QString, QString);
     Q_INVOKABLE void writeToFile();
     Q_INVOKABLE QString currentStatus();
-    Q_INVOKABLE void viewSavedTasks();
+    Q_INVOKABLE void tasksView();
 
 private:
 //    QFile* file;
@@ -30,10 +32,12 @@ private:
     };
     QList<Task*> taskList;
     QSqlDatabase database;
+    QSqlTableModel* model;
 
 signals:
     void fileLoaded(bool success);
     void incorrectData();
+    void setModel(QSqlTableModel& mdl);
 };
 
 #endif // ORGANIZER_H

@@ -3,7 +3,7 @@
         <file>main.qml</file>
         <file>MyButton.qml</file>
         <file>tasks.db</file>
-        <file>viewWindow.qml</file>
+        <file>Table.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file>button.png</file>

@@ -75,9 +75,16 @@ QString Organizer::currentStatus()
     }
     else
         emit fileLoaded(false);
+    return "";
 }
 
-void Organizer::viewSavedTasks()
+void Organizer::tasksView()
 {
-
+    if (database.isOpen())
+    {
+        model = new QSqlTableModel(this, database);
+        emit setModel(*model);
+//        Table table(database);
+//        table.show();
+    }
 }

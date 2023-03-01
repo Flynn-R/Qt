@@ -1,7 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QSqlTableModel>
+#include <QQmlContext>
 #include "organizer.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     qmlRegisterType<Organizer>("Organizer", 1, 0, "Organizer");
+    QSqlTableModel model;
+    engine.rootContext()->setContextProperty("model", &model);
     engine.load(url);
 
     return app.exec();

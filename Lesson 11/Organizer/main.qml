@@ -5,12 +5,15 @@ import QtQuick.Controls 2.0
 import Organizer 1.0
 
 Window {
+
+    signal openTableView
+
     width: 640
     height: 480
     minimumWidth: 640
     minimumHeight: 480
     visible: true
-    title: qsTr("Organizer")
+    title: "Organizer"
 
     onClosing: {
         _organizer.writeToFile()
@@ -71,8 +74,13 @@ Window {
         text: "View saved tasks"
 
         onClicked: {
-            _organizer.viewSavedTasks()
+//            _organizer.viewSavedTasks()
+            _table.show()
         }
+    }
+
+    Table {
+        id: _table
     }
 
     Label {
@@ -95,6 +103,10 @@ Window {
 
         onIncorrectData: {
             _status.text = "Incorrect data was entered!"
+        }
+
+        onSetModel: {
+            model = mdl
         }
     }
 }

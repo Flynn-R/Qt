@@ -59,8 +59,8 @@ QStringList MainWindow::parse(const QString& html)
     for (auto i = 0; i < QUANTITY; ++i)
     {
         auto match = regexParse.match(html, pos);
-        pos += match.capturedEnd(2);
-        sources.append("https://" + match.captured(2));
+        pos += match.capturedEnd(1);
+        sources.append("https://" + match.captured(1));
     }
 
     return sources;

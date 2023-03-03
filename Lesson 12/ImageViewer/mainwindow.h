@@ -20,7 +20,7 @@ private:
     QLineEdit* requestField;
     QPushButton* searchButton;
     const QString searchURL = "https://yandex.ru/images/search?text=";
-    const QRegularExpression regexParse = QRegularExpression("(<img class=\"serp-item__thumb justifier__thumb\" src=\"//)(.+?(?=\"))");
+    const QRegularExpression regexParse = QRegularExpression("<img.+?(?=src=)src=\"//(.+?(?=\"))");
     const QRegularExpression regexName = QRegularExpression("(id=)(.+?(?=-))");
 
     void showPics(const QStringList&);

@@ -2,7 +2,13 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QLabel>
-#include "imagegetter.h"
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QUrl>
+
+#define QUANTITY 3
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,33 +25,80 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(searchButton);
 
     connect(searchButton, &QPushButton::clicked, this, &MainWindow::startSearch);
-    connect(&downloader, &Downloader::finished, this, &MainWindow::finishSearch);
+
+    setWindowTitle("Image Search");
+}
+
+QString MainWindow::getHTML(const QString& url)
+{
+    QNetworkAccessManager nam;
+    QNetworkReply* response = nam.get(QNetworkRequest(QUrl(url)));
+    QEventLoop event;
+    connect(response, &QNetworkReply::finished, &event, &QEventLoop::quit);
+    event.exec();
+    response->deleteLater();
+    return response->readAll();
 }
 
 void MainWindow::startSearch()
 {
-    downloader.download(QUrl(searchURL + requestField->text()));
+    QString html = getHTML(searchURL + requestField->text());
+
+    QStringList images;
+    for (auto i = 0; i < QUANTITY; ++i)
+        images = parse(html);
+
+    showPics(getPics(images));
 }
 
-void MainWindow::finishSearch(const QUrl& url, const QByteArray& bArray)
+QStringList MainWindow::parse(const QString& html)
 {
-    html = new QFile(url.path().section('/', -1));
-    if (html->open(QIODevice::ReadWrite))
-        html->write(bArray);
+    QStringList sources;
 
-    ImageGetter imageGetter(html);
-    showPics(imageGetter.getImages());
-    if (html->isOpen())
-        html->close();
+    qsizetype pos = 0;
+    for (auto i = 0; i < QUANTITY; ++i)
+    {
+        auto match = regexParse.match(html, pos);
+        pos += match.capturedEnd(2);
+        sources.append("https://" + match.captured(2));
+    }
+
+    return sources;
 }
 
-void MainWindow::showPics(QStringList pics)
+QStringList MainWindow::getPics(const QStringList& url)
+{
+    QStringList pics;
+
+    for (auto& it : url)
+    {
+        QNetworkAccessManager nam;
+        QNetworkReply* reply = nam.get(QNetworkRequest(QUrl(it)));
+        QEventLoop event;
+        connect(reply, &QNetworkReply::finished, &event, &QEventLoop::quit);
+        event.exec();
+        reply->deleteLater();
+
+        QFile file(regexName.match(it).captured(2));
+        if (file.open(QIODevice::WriteOnly))
+        {
+            file.write(reply->readAll());
+            pics.append(file.fileName());
+        }
+    }
+
+    return pics;
+}
+
+void MainWindow::showPics(const QStringList& pics)
 {
     for (auto& it : pics)
     {
+        QPixmap pixmap(it);
+        pixmap = pixmap.scaled(pixmap.size() * 3);
         auto label = new QLabel;
-        label->setPixmap(QPixmap(it));
-        label->setFixedSize(label->pixmap().size());
+        label->setPixmap(pixmap);
+        label->setFixedSize(pixmap.size());
         label->show();
     }
 }

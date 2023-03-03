@@ -5,8 +5,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QFile>
-#include "downloader.h"
-#include "imagegetter.h"
+#include <QRegularExpression>
+#include <QNetworkReply>
 
 class MainWindow : public QMainWindow
 {
@@ -17,16 +17,18 @@ public:
     ~MainWindow() = default;
 
 private:
-    Downloader downloader;
     QLineEdit* requestField;
     QPushButton* searchButton;
     const QString searchURL = "https://yandex.ru/images/search?text=";
-    QFile* html;
+    const QRegularExpression regexParse = QRegularExpression("(<img class=\"serp-item__thumb justifier__thumb\" src=\"//)(.+?(?=\"))");
+    const QRegularExpression regexName = QRegularExpression("(id=)(.+?(?=-))");
 
-    void showPics(QStringList);
+    void showPics(const QStringList&);
+    QString getHTML(const QString&);
+    QStringList parse(const QString&);
+    QStringList getPics(const QStringList&);
 
 private slots:
     void startSearch();
-    void finishSearch(const QUrl&, const QByteArray&);
 };
 #endif // MAINWINDOW_H
